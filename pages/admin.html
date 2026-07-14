@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MAFD Eventos · Painel administrativo</title>
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+  </head>
+  <body>
+    <main class="admin-shell">
+      <header class="admin-header">
+        <div>
+          <p class="eyebrow">Painel temporário</p>
+          <h1>Confirmações do evento</h1>
+          <p>Esta versão lê os dados salvos no mesmo navegador e será substituída por uma integração com o Supabase.</p>
+        </div>
+        <a class="button" href="../index.html">Voltar ao site</a>
+      </header>
+
+      <section class="stats-grid" aria-label="Resumo das confirmações">
+        <article class="stat-card">
+          <h2 id="total-inscricoes">0</h2>
+          <p>Total de inscrições</p>
+        </article>
+        <article class="stat-card">
+          <h2 id="total-participantes">0</h2>
+          <p>Total estimado de participantes</p>
+        </article>
+        <article class="stat-card">
+          <h2 id="total-coquetel">0</h2>
+          <p>Participarão do coquetel</p>
+        </article>
+        <article class="stat-card">
+          <h2 id="total-primeira-vez">0</h2>
+          <p>Primeira participação</p>
+        </article>
+      </section>
+
+      <section class="toolbar">
+        <label class="search-field" for="search-input">
+          <span>Buscar</span>
+          <input id="search-input" type="search" placeholder="Nome ou WhatsApp" />
+        </label>
+        <div class="toolbar__actions">
+          <button class="button button--ghost" id="export-csv" type="button">Exportar CSV</button>
+          <button class="button button--ghost" id="clear-all" type="button">Limpar tudo</button>
+        </div>
+      </section>
+
+      <section class="table-card">
+        <div id="empty-state" class="empty-state">
+          <h2>Nenhuma confirmação ainda</h2>
+          <p>As inscrições aparecerão aqui após o formulário do site ser enviado.</p>
+        </div>
+        <div id="table-wrapper" class="table-wrapper" hidden>
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>WhatsApp</th>
+                <th>Igreja</th>
+                <th>Convidados</th>
+                <th>Data</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="registrations-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/admin.js"></script>
+  </body>
+</html>

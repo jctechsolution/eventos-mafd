@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Festa de Crente... Com Homens de Deus — um encontro especial da Rede de Homens da MAFD em Manaus."
+    />
+    <title>MAFD Eventos | Festa de Crente... Com Homens de Deus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <div class="opening-screen" id="opening-screen" role="dialog" aria-label="Abertura cinematográfica">
+      <div class="opening-screen__glow"></div>
+      <div class="opening-screen__logo">
+        <img src="assets/img/logo-rede-homens.jpeg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <span class="opening-screen__fallback" aria-hidden="true">RH</span>
+      </div>
+      <div class="opening-screen__titles">
+        <p class="opening-screen__label">REDE DE HOMENS</p>
+        <h2>FESTA DE CRENTE...</h2>
+        <h3>COM HOMENS DE DEUS</h3>
+      </div>
+      <button class="opening-screen__skip" type="button" id="skip-intro">Pular</button>
+    </div>
+
+    <div class="page-shell">
+      <header class="site-header" id="topo">
+        <a class="brand" href="#topo" aria-label="Voltar ao topo da página">
+          <span class="brand__mark">
+            <img
+              src="assets/img/logo-rede-homens.jpeg"
+              alt="Logomarca da Rede de Homens"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';"
+            />
+            <span class="brand__fallback" aria-hidden="true">RH</span>
+          </span>
+          <span class="brand__text">
+            <strong>MAFD Eventos</strong>
+            <small>Rede de Homens</small>
+          </span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span class="sr-only">Abrir menu</span>
+        </button>
+
+        <nav class="site-nav" id="site-nav" aria-label="Navegação principal">
+          <a href="#evento">Evento</a>
+          <a href="#programacao">Programação</a>
+          <a href="#confirmacao">Confirmação</a>
+          <a href="#localizacao">Localização</a>
+        </nav>
+
+        <a class="button button--ghost" href="#confirmacao">Confirmar presença</a>
+      </header>
+
+      <main>
+        <section class="hero" id="evento">
+          <div class="hero__content" data-animate>
+            <p class="eyebrow">ENCONTRO ESPECIAL 2026</p>
+            <h1>
+              <span>Festa de Crente...</span>
+              <strong>Com Homens de Deus</strong>
+            </h1>
+            <p class="hero__purpose">
+              “Porque homens transformados por Deus transformam famílias, igrejas e gerações.”
+            </p>
+            <div class="hero__meta">
+              <div>
+                <span class="meta-label">Data</span>
+                <strong>08 de agosto de 2026</strong>
+              </div>
+              <div>
+                <span class="meta-label">Horário</span>
+                <strong>17h às 21h</strong>
+              </div>
+              <div>
+                <span class="meta-label">Local</span>
+                <strong>MAFD · Manaus</strong>
+              </div>
+            </div>
+            <div class="hero__actions">
+              <a class="button" href="#confirmacao">Confirmar presença</a>
+              <a class="button button--ghost" href="#localizacao">Ver localização</a>
+            </div>
+            <p class="hero__note">Uma noite de fé, comunhão, propósito e fortalecimento espiritual.</p>
+          </div>
+
+          <div class="hero__visual" data-animate>
+            <div class="hero__halo"></div>
+            <div class="hero__logo-card">
+              <div class="hero__logo-frame">
+                <img src="assets/img/logo-rede-homens.jpeg" alt="Logomarca da Rede de Homens" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="hero__logo-fallback" aria-hidden="true">RH</span>
+              </div>
+              <div class="hero__visual-badges">
+                <span>Adoração</span>
+                <span>Palavra</span>
+                <span>Comunhão</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="countdown" aria-labelledby="countdown-title" data-animate>
+          <div class="section-heading">
+            <p class="eyebrow">Contagem regressiva</p>
+            <h2 id="countdown-title">O grande encontro se aproxima</h2>
+          </div>
+          <div class="countdown__grid" id="countdown">
+            <div class="countdown__item">
+              <strong data-unit="days">00</strong>
+              <span>Dias</span>
+            </div>
+            <div class="countdown__item">
+              <strong data-unit="hours">00</strong>
+              <span>Horas</span>
+            </div>
+            <div class="countdown__item">
+              <strong data-unit="minutes">00</strong>
+              <span>Minutos</span>
+            </div>
+            <div class="countdown__item">
+              <strong data-unit="seconds">00</strong>
+              <span>Segundos</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="purpose" data-animate>
+          <div class="section-heading">
+            <p class="eyebrow">Propósito</p>
+            <h2>Homens transformados, famílias e gerações fortalecidas</h2>
+          </div>
+          <div class="purpose__content">
+            <p>
+              Em um tempo em que a vida exige coragem, firmeza e fidelidade, este encontro reúne homens
+              dispostos a viver com integridade, servir com dedicação e fortalecer a comunhão em nome do
+              Senhor.
+            </p>
+            <p>
+              Será uma noite marcada por adoração, palavra, convivência e fortalecimento espiritual, com
+              o propósito de inspirar cada presença a viver com mais presença, propósito e unção.
+            </p>
+            <blockquote>“Esforcem-se para conservar a unidade do Espírito pelo vínculo da paz.” <span>Efésios 4:3</span></blockquote>
+          </div>
+        </section>
+
+        <section class="attractions" aria-labelledby="attractions-title" data-animate>
+          <div class="section-heading">
+            <p class="eyebrow">Atrações</p>
+            <h2 id="attractions-title">Uma noite preparada com excelência</h2>
+          </div>
+          <div class="card-grid">
+            <article class="info-card">
+              <div class="info-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5.2-3.3 8.9-8 10-4.7-1.1-8-4.8-8-10V7l8-4z" /></svg>
+              </div>
+              <h3>Louvor e Adoração</h3>
+              <p>Uma atmosfera de reverência e intensidade espiritual da primeira até a última hora.</p>
+            </article>
+            <article class="info-card">
+              <div class="info-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 4h14v10H5zM8 18h8v2H8z" /></svg>
+              </div>
+              <h3>Ministrações</h3>
+              <p>Palavra que gera direção, sabedoria e renovação para a vida e o chamado masculino.</p>
+            </article>
+            <article class="info-card">
+              <div class="info-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm-7 13a7 7 0 0 1 14 0" /></svg>
+              </div>
+              <h3>Dinâmicas</h3>
+              <p>Atividades pensadas para criar integração, amizade e ambiente acolhedor.</p>
+            </article>
+            <article class="info-card">
+              <div class="info-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M6 5h12v4H6zM7 10h10v9H7z" /></svg>
+              </div>
+              <h3>Coquetel</h3>
+              <p>Onde tem crente tem que ter <strong>COQUETEL</strong>. Um momento de comunhão e elegância.</p>
+            </article>
+            <article class="info-card">
+              <div class="info-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 4h14v3H5zM7 7h10l-1 13H8L7 7z" /></svg>
+              </div>
+              <h3>Sorteio de Brindes</h3>
+              <p>Surpresas e presença de alegria para valorizar cada participante.</p>
+            </article>
+            <article class="info-card">
+              <div class="info-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 3c2.8 0 5 2.2 5 4.8 0 3.2-3.3 6.6-5 8.2-1.7-1.6-5-5-5-8.2C7 5.2 9.2 3 12 3zm0 2.6c-1.2 0-2.2 1-2.2 2.2S10.8 10 12 10s2.2-1 2.2-2.2S13.2 5.6 12 5.6z" /></svg>
+              </div>
+              <h3>Unção</h3>
+              <p>Muita unção do Espírito Santo como Anfitrião.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="schedule" id="programacao" data-animate>
+          <div class="section-heading">
+            <p class="eyebrow">Programação</p>
+            <h2>Uma experiência pensada para cada momento</h2>
+          </div>
+          <div class="timeline">
+            <div class="timeline__item">
+              <span class="timeline__time">17h00</span>
+              <div class="timeline__content">
+                <h3>Recepção e acolhimento</h3>
+                <p>Boas-vindas, integração e ambientação.</p>
+              </div>
+            </div>
+            <div class="timeline__item">
+              <span class="timeline__time">17h30</span>
+              <div class="timeline__content">
+                <h3>Louvor e adoração</h3>
+                <p>Momento de exaltação e presença do Senhor.</p>
+              </div>
+            </div>
+            <div class="timeline__item">
+              <span class="timeline__time">18h10</span>
+              <div class="timeline__content">
+                <h3>Dinâmica e integração</h3>
+                <p>Interação leve, acolhedora e plena de propósito.</p>
+              </div>
+            </div>
+            <div class="timeline__item">
+              <span class="timeline__time">18h40</span>
+              <div class="timeline__content">
+                <h3>Ministração da Palavra</h3>
+                <p>Uma palavra que edifica e direciona o coração.</p>
+              </div>
+            </div>
+            <div class="timeline__item">
+              <span class="timeline__time">19h40</span>
+              <div class="timeline__content">
+                <h3>Coquetel e comunhão</h3>
+                <p>Tempo de convivência, descontração e relacionamento.</p>
+              </div>
+            </div>
+            <div class="timeline__item">
+              <span class="timeline__time">20h20</span>
+              <div class="timeline__content">
+                <h3>Sorteio de brindes</h3>
+                <p>Encerramento com alegria e surpresa.</p>
+              </div>
+            </div>
+            <div class="timeline__item">
+              <span class="timeline__time">20h45</span>
+              <div class="timeline__content">
+                <h3>Oração e encerramento</h3>
+                <p>Uma última palavra de fé e bênção.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="details" id="localizacao" data-animate>
+          <div class="section-heading">
+            <p class="eyebrow">Informações do evento</p>
+            <h2>Chegue com tranquilidade e esteja presente</h2>
+          </div>
+          <div class="details__grid">
+            <div class="details__card">
+              <div class="detail-item">
+                <div class="detail-item__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 3a7 7 0 0 1 7 7c0 5.2-7 11-7 11S5 15.2 5 10a7 7 0 0 1 7-7zm0 3.2A3.8 3.8 0 1 0 12 13.8 3.8 3.8 0 0 0 12 6.2z" /></svg>
+                </div>
+                <div>
+                  <h3>Local</h3>
+                  <p>MAFD — Ministério Apostólico Fortaleza de Davi</p>
+                  <p>Rua Olavo Bilac, 165 · Japiim · Manaus · AM</p>
+                  <p>CEP 69078-439</p>
+                </div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-item__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 2h10v2h-3v4h3v2h-3v6h3v2H7v-2h3v-6H7V8h3V4H7z" /></svg>
+                </div>
+                <div>
+                  <h3>Data e horário</h3>
+                  <p>08 de agosto de 2026</p>
+                  <p>Início às 17h · Término às 21h</p>
+                </div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-item__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 4v2h12V8H6zm0 4v2h8v-2H6z" /></svg>
+                </div>
+                <div>
+                  <h3>Contato</h3>
+                  <p>+55 92 8192-2980</p>
+                </div>
+              </div>
+            </div>
+            <div class="details__card details__card--actions">
+              <a class="button button--full" href="https://www.google.com/maps/search/?api=1&query=MAFD%20Minist%C3%A9rio%20Apost%C3%B3lico%20Fortaleza%20de%20Davi%2C%20Rua%20Olavo%20Bilac%20165%2C%20Japiim%2C%20Manaus%20AM%2C%2069078-439" target="_blank" rel="noreferrer">Abrir no Google Maps</a>
+              <a class="button button--ghost button--full" href="https://wa.me/559281922980?text=Ol%C3%A1%21%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20Festa%20de%20Crente...%20Com%20Homens%20de%20Deus%2C%20no%20dia%2008%20de%20agosto%20de%202026." target="_blank" rel="noreferrer">Conversar no WhatsApp</a>
+              <button class="button button--ghost button--full" type="button" data-action="agenda">Adicionar ao Google Agenda</button>
+              <button class="button button--ghost button--full" type="button" data-action="share">Compartilhar evento</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="confirmation" id="confirmacao" data-animate>
+          <div class="section-heading">
+            <p class="eyebrow">Confirmação</p>
+            <h2>Garanta sua presença com elegância e segurança</h2>
+          </div>
+          <div class="confirmation__layout">
+            <form id="confirmation-form" novalidate>
+              <div class="field-group">
+                <label for="nome">Nome completo</label>
+                <input id="nome" name="nome" type="text" required />
+              </div>
+              <div class="field-group">
+                <label for="whatsapp">WhatsApp</label>
+                <input id="whatsapp" name="whatsapp" type="tel" inputmode="tel" required />
+              </div>
+              <div class="field-group">
+                <label for="igreja">Igreja ou congregação</label>
+                <input id="igreja" name="igreja" type="text" />
+              </div>
+              <div class="field-group field-group--inline">
+                <label for="primeira-vez">Primeira vez na Rede de Homens?</label>
+                <select id="primeira-vez" name="primeiraVez" required>
+                  <option value="">Selecione</option>
+                  <option value="Sim">Sim</option>
+                  <option value="Não">Não</option>
+                </select>
+              </div>
+              <div class="field-group field-group--inline">
+                <label for="coquetel">Participará do coquetel?</label>
+                <select id="coquetel" name="coquetel" required>
+                  <option value="">Selecione</option>
+                  <option value="Sim">Sim</option>
+                  <option value="Não">Não</option>
+                </select>
+              </div>
+              <div class="field-group field-group--inline">
+                <label for="convidados">Levará convidados?</label>
+                <select id="convidados" name="convidados" required>
+                  <option value="">Selecione</option>
+                  <option value="Sim">Sim</option>
+                  <option value="Não">Não</option>
+                </select>
+              </div>
+              <div class="field-group field-group--conditional" id="grupo-convidados">
+                <label for="quantidade-convidados">Quantidade de convidados</label>
+                <input id="quantidade-convidados" name="quantidadeConvidados" type="number" min="1" max="10" />
+              </div>
+              <div class="field-group">
+                <label for="observacao">Observação</label>
+                <textarea id="observacao" name="observacao" rows="4"></textarea>
+              </div>
+              <div class="checkbox-group">
+                <input id="consentimento" name="consentimento" type="checkbox" required />
+                <label for="consentimento">Autorizo o uso dos meus dados exclusivamente para a organização do evento.</label>
+              </div>
+              <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+              <button class="button button--full" type="submit">Confirmar minha presença</button>
+            </form>
+
+            <aside class="confirmation__summary" id="confirmation-summary">
+              <h3>Resumo elegante</h3>
+              <p>Após o envio, você receberá uma confirmação visual com o total de participantes e links prontos para compartilhar.</p>
+              <div class="summary-badges">
+                <span>Presença assegurada</span>
+                <span>Coquetel incluso</span>
+                <span>Comunhão especial</span>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="scripture" data-animate>
+          <div class="scripture__mark" aria-hidden="true">✧</div>
+          <p class="scripture__verse">“Esforcem-se para conservar a unidade do Espírito pelo vínculo da paz.”</p>
+          <p class="scripture__reference">Efésios 4:3</p>
+          <p class="scripture__message">
+            “Deus continua levantando homens comprometidos com Sua Palavra, sua família e seu Reino. Este encontro será um tempo de comunhão, crescimento espiritual, adoração e fortalecimento da fé. Venha viver uma noite especial preparada por Deus para sua vida.”
+          </p>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div>
+          <strong>MAFD Eventos</strong>
+          <p>Ministério Apostólico Fortaleza de Davi</p>
+        </div>
+        <div>
+          <strong>Contato</strong>
+          <p>+55 92 8192-2980</p>
+        </div>
+        <div>
+          <strong>2026</strong>
+          <p>Rede de Homens · comunhão, propósito e fé.</p>
+        </div>
+      </footer>
+    </div>
+
+    <a class="floating-whatsapp" href="https://wa.me/559281922980?text=Ol%C3%A1%21%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20Festa%20de%20Crente...%20Com%20Homens%20de%20Deus%2C%20no%20dia%2008%20de%20agosto%20de%202026." target="_blank" rel="noreferrer" aria-label="Conversar no WhatsApp">
+      <span>✆</span>
+    </a>
+
+    <button class="back-to-top" type="button" aria-label="Voltar ao topo">↑</button>
+
+    <script src="assets/js/config.js" defer></script>
+    <script src="assets/js/supabase.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
+  </body>
+</html>
