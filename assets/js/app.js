@@ -28,22 +28,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('[data-animate]').forEach((item) => observer.observe(item));
 
-  const closeIntro = () => {
-    if (!openingScreen) {
-      return;
-    }
-    openingScreen.classList.add('is-hidden');
-    document.body.classList.add('intro-complete');
-    window.sessionStorage.setItem('mafd-intro-seen', 'true');
+  const introTimeouts = new Set();
+  let introState = 'active';
+
+  const scheduleIntro = (callback, delay) => {
+    const timeoutId = window.setTimeout(() => {
+      introTimeouts.delete(timeoutId);
+      callback();
+    }, delay);
+    introTimeouts.add(timeoutId);
+    return timeoutId;
   };
 
-  if (openingScreen) {
-    const alreadySeen = window.sessionStorage.getItem('mafd-intro-seen');
-    if (alreadySeen || prefersReducedMotion) {
-      closeIntro();
+  const clearIntroTimeouts = () => {
+    introTimeouts.forEach((timeoutId) => window.clearTimeout(timeoutId));
+    introTimeouts.clear();
+  };
+
+  const storeIntroCompletion = () => {
+    try {
+      window.sessionStorage.setItem('mafd-intro-seen', 'true');
+    } catch (error) {
+      console.warn('Não foi possível registrar a abertura nesta sessão.', error);
+    }
+  };
+
+  const finishIntro = ({ markSeen = true } = {}) => {
+    if (introState === 'complete') {
+      return;
+    }
+
+    introState = 'complete';
+    clearIntroTimeouts();
+    openingScreen?.classList.add('is-hidden');
+    document.body.classList.remove('intro-active');
+    document.body.classList.add('intro-complete');
+    if (markSeen) {
+      storeIntroCompletion();
+    }
+    openingScreen?.remove();
+  };
+
+  const closeIntro = ({ immediate = false, skipped = false, markSeen = true } = {}) => {
+    if (introState === 'complete') {
+      return;
+    }
+
+    clearIntroTimeouts();
+
+    if (!openingScreen || immediate) {
+      finishIntro({ markSeen });
+      return;
+    }
+
+    introState = 'leaving';
+    openingScreen.classList.add(skipped ? 'is-skipping' : 'is-leaving');
+    scheduleIntro(finishIntro, skipped ? 160 : 600);
+  };
+
+  if (!openingScreen) {
+    closeIntro({ immediate: true, markSeen: false });
+  } else {
+    let alreadySeen = false;
+    try {
+      alreadySeen = window.sessionStorage.getItem('mafd-intro-seen') === 'true';
+    } catch (error) {
+      console.warn('Não foi possível consultar o estado da abertura.', error);
+    }
+
+    if (alreadySeen) {
+      closeIntro({ immediate: true, markSeen: false });
+    } else if (prefersReducedMotion) {
+      document.body.classList.add('intro-active');
+      scheduleIntro(() => closeIntro({ skipped: true }), 40);
     } else {
-      window.setTimeout(closeIntro, 2150);
-      skipIntroButton?.addEventListener('click', closeIntro);
+      document.body.classList.add('intro-active');
+      openingScreen.classList.add('is-visible');
+      scheduleIntro(closeIntro, 1250);
+      skipIntroButton?.addEventListener('click', () => closeIntro({ skipped: true }), { once: true });
     }
   }
 
