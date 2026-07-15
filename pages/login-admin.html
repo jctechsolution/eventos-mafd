@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Administração | MAFD Eventos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/login-admin.css" />
+  </head>
+  <body>
+    <main class="admin-login-shell">
+      <section class="admin-login-card" aria-labelledby="admin-login-title">
+        <img src="../assets/img/logo-rede-homens.jpeg" alt="Rede de Homens MAFD" />
+        <span>ÁREA RESTRITA</span>
+        <h1 id="admin-login-title">Administração MAFD Eventos</h1>
+        <p>Área restrita para gerenciamento do evento.</p>
+        <form id="admin-login-form">
+          <label for="admin-email">E-mail</label>
+          <input id="admin-email" name="email" type="email" autocomplete="username" required />
+          <label for="admin-password">Senha</label>
+          <input id="admin-password" name="password" type="password" autocomplete="current-password" required />
+          <p id="admin-login-message" role="status" aria-live="polite"></p>
+          <button type="submit">Entrar no painel</button>
+        </form>
+        <a href="login-recepcao.html">Entrar na recepção</a>
+        <a href="../index.html">Voltar ao evento</a>
+        <small>Somente administradores autorizados podem acessar esta área.</small>
+      </section>
+    </main>
+    <script src="../assets/js/config.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="../assets/js/admin-auth.js" defer></script>
+    <script src="../assets/js/login-admin.js" defer></script>
+  </body>
+</html>

@@ -3,74 +3,90 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MAFD Eventos · Painel administrativo</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Painel administrativo | MAFD Eventos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/css/admin.css" />
   </head>
   <body>
-    <main class="admin-shell">
-      <header class="admin-header">
-        <div>
-          <p class="eyebrow">Painel temporário</p>
-          <h1>Confirmações do evento</h1>
-          <p>Esta versão lê os dados salvos no mesmo navegador e será substituída por uma integração com o Supabase.</p>
-        </div>
-        <a class="button" href="../index.html">Voltar ao site</a>
-      </header>
+    <div class="admin-loading" id="admin-loading" role="status" aria-live="polite">
+      <span class="admin-loading__spinner"></span>
+      <p>Validando acesso administrativo...</p>
+    </div>
 
-      <section class="stats-grid" aria-label="Resumo das confirmações">
-        <article class="stat-card">
-          <h2 id="total-inscricoes">0</h2>
-          <p>Total de inscrições</p>
-        </article>
-        <article class="stat-card">
-          <h2 id="total-participantes">0</h2>
-          <p>Total estimado de participantes</p>
-        </article>
-        <article class="stat-card">
-          <h2 id="total-coquetel">0</h2>
-          <p>Participarão do coquetel</p>
-        </article>
-        <article class="stat-card">
-          <h2 id="total-primeira-vez">0</h2>
-          <p>Primeira participação</p>
-        </article>
+    <div class="admin-app" id="admin-app" hidden>
+      <aside class="admin-sidebar" id="admin-sidebar">
+        <div class="admin-brand"><img src="../assets/img/logo-rede-homens.jpeg" alt="" /><div><strong>MAFD Eventos</strong><span>Administração</span></div></div>
+        <nav aria-label="Navegação administrativa">
+          <a href="#overview">Visão geral</a>
+          <a href="#participants">Participantes</a>
+          <button type="button" id="show-checkins">Check-ins</button>
+          <button type="button" id="sidebar-export">Relatórios</button>
+        </nav>
+        <div class="admin-sidebar__footer">
+          <a href="../index.html" target="_blank" rel="noopener">Abrir página pública</a>
+          <button type="button" id="sidebar-logout">Sair</button>
+        </div>
+      </aside>
+      <div class="admin-sidebar-backdrop" id="admin-sidebar-backdrop" hidden></div>
+
+      <main class="admin-main">
+        <header class="admin-header">
+          <button class="admin-menu-button" id="admin-menu-button" type="button" aria-expanded="false" aria-controls="admin-sidebar" aria-label="Abrir menu administrativo">☰</button>
+          <div><p class="eyebrow">Painel administrativo</p><h1>Visão geral do evento</h1><p id="last-updated">Aguardando atualização</p></div>
+          <div class="admin-header__actions"><span id="admin-email"></span><button type="button" id="refresh-data">Atualizar dados</button><button type="button" id="header-logout">Sair</button></div>
+        </header>
+
+        <p class="admin-global-message" id="admin-global-message" role="status" aria-live="polite"></p>
+
+        <section id="overview" aria-labelledby="overview-title">
+          <div class="section-title"><div><p class="eyebrow">Resumo</p><h2 id="overview-title">Indicadores principais</h2></div><button type="button" id="retry-summary" hidden>Tentar novamente</button></div>
+          <div class="admin-stats" id="admin-stats" aria-live="polite"></div>
+        </section>
+
+        <section class="participants-section" id="participants" aria-labelledby="participants-title">
+          <div class="section-title"><div><p class="eyebrow">Cadastros</p><h2 id="participants-title">Participantes confirmados</h2></div><button class="primary-button" type="button" id="export-csv">Exportar CSV</button></div>
+
+          <form class="admin-filters" id="admin-filters">
+            <label class="filter-search">Buscar<input id="filter-search" type="search" placeholder="Nome, WhatsApp ou igreja" maxlength="100" /></label>
+            <label>Primeira vez<select id="filter-first"><option value="">Todos</option><option value="true">Sim</option><option value="false">Não</option></select></label>
+            <label>Coquetel<select id="filter-cocktail"><option value="">Todos</option><option value="true">Sim</option><option value="false">Não</option></select></label>
+            <label>Check-in<select id="filter-checkin"><option value="todos">Todos</option><option value="realizado">Realizado</option><option value="aguardando">Aguardando</option></select></label>
+            <label>Ordenar<select id="filter-order"><option value="mais_recentes">Mais recentes</option><option value="mais_antigos">Mais antigos</option><option value="nome_az">Nome A–Z</option><option value="nome_za">Nome Z–A</option></select></label>
+            <div class="admin-filters__actions"><button class="primary-button" type="submit">Aplicar filtros</button><button type="button" id="clear-filters">Limpar filtros</button></div>
+          </form>
+
+          <div class="participants-card">
+            <div class="table-state" id="table-state" role="status" aria-live="polite">Carregando participantes...</div>
+            <button type="button" id="retry-list" hidden>Tentar novamente</button>
+            <div class="admin-table-wrapper" id="table-wrapper" hidden>
+              <table><caption>Confirmações do evento</caption><thead><tr><th>Nome</th><th>WhatsApp</th><th>Igreja</th><th>Primeira vez</th><th>Coquetel</th><th>Convidados</th><th>Confirmação</th><th>Check-in</th><th>Ações</th></tr></thead><tbody id="participants-body"></tbody></table>
+            </div>
+            <div class="participant-cards" id="participant-cards" hidden></div>
+            <div class="pagination" id="pagination" hidden>
+              <button type="button" id="previous-page">Anterior</button><span id="page-indicator">Página 1</span><button type="button" id="next-page">Próxima</button>
+              <label>Por página<select id="page-size"><option>10</option><option selected>25</option><option>50</option><option>100</option></select></label><span id="records-indicator"></span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="participant-modal" id="participant-modal" hidden>
+      <div class="participant-modal__backdrop" data-detail-close></div>
+      <section class="participant-modal__panel" role="dialog" aria-modal="true" aria-labelledby="participant-modal-title" tabindex="-1">
+        <button type="button" class="participant-modal__close" data-detail-close aria-label="Fechar detalhes">×</button>
+        <h2 id="participant-modal-title">Resumo do participante</h2>
+        <dl id="participant-details"></dl>
+        <button type="button" data-detail-close>Fechar</button>
       </section>
+    </div>
 
-      <section class="toolbar">
-        <label class="search-field" for="search-input">
-          <span>Buscar</span>
-          <input id="search-input" type="search" placeholder="Nome ou WhatsApp" />
-        </label>
-        <div class="toolbar__actions">
-          <button class="button button--ghost" id="export-csv" type="button">Exportar CSV</button>
-          <button class="button button--ghost" id="clear-all" type="button">Limpar tudo</button>
-        </div>
-      </section>
-
-      <section class="table-card">
-        <div id="empty-state" class="empty-state">
-          <h2>Nenhuma confirmação ainda</h2>
-          <p>As inscrições aparecerão aqui após o formulário do site ser enviado.</p>
-        </div>
-        <div id="table-wrapper" class="table-wrapper" hidden>
-          <table>
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>WhatsApp</th>
-                <th>Igreja</th>
-                <th>Convidados</th>
-                <th>Data</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody id="registrations-body"></tbody>
-          </table>
-        </div>
-      </section>
-    </main>
-
-    <script src="../assets/js/config.js"></script>
-    <script src="../assets/js/admin.js"></script>
+    <script src="../assets/js/config.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="../assets/js/admin-auth.js" defer></script>
+    <script src="../assets/js/admin.js" defer></script>
   </body>
 </html>
