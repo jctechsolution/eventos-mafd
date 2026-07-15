@@ -1391,14 +1391,107 @@ textarea:focus {
 .digital-receipt__actions { justify-content: center; width: 100%; }
 
 .confirmation.is-confirmed > .section-heading,
-.confirmation.is-confirmed #confirmation-form { display: none; }
+.confirmation.is-confirmed #confirmation-form,
+.confirmation.is-confirmed .ticket-recovery-entry { display: none; }
 .confirmation__layout.is-receipt-only { grid-template-columns: minmax(0, 760px); justify-content: center; }
 .confirmation__layout.is-receipt-only .confirmation__summary { width: 100%; }
+
+.ticket-recovery-entry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.8rem 1rem;
+  margin: -0.4rem 0 1.25rem;
+  text-align: center;
+}
+
+.ticket-recovery-entry p { margin: 0; color: var(--muted); }
+body.recovery-modal-open { overflow: hidden; }
+.ticket-recovery-modal[hidden] { display: none; }
+
+.ticket-recovery-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.ticket-recovery-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(8px);
+}
+
+.ticket-recovery-modal__panel {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 540px);
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid rgba(242, 211, 139, 0.3);
+  border-radius: 24px;
+  background: #100f0c;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.62);
+}
+
+.ticket-recovery-modal__panel h2,
+.ticket-recovery-modal__panel p { margin: 0; }
+.ticket-recovery-modal__panel > p { color: var(--muted); line-height: 1.6; }
+
+.ticket-recovery-modal__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.ticket-recovery-local {
+  display: grid;
+  gap: 0.65rem;
+  padding: 1rem;
+  border: 1px solid rgba(242, 211, 139, 0.24);
+  border-radius: 18px;
+  background: rgba(201, 164, 74, 0.08);
+}
+
+.ticket-recovery-local[hidden] { display: none; }
+.ticket-recovery-local span { color: var(--muted); }
+.ticket-recovery-separator { display: flex; align-items: center; gap: 0.8rem; color: var(--muted); }
+.ticket-recovery-separator::before,
+.ticket-recovery-separator::after { content: ''; height: 1px; flex: 1; background: var(--border); }
+.ticket-recovery-use-data,
+.ticket-recovery-register { border: 0; background: transparent; color: var(--gold-strong); font: inherit; cursor: pointer; text-decoration: underline; }
+#ticket-recovery-form { display: grid; gap: 0.9rem; }
+.ticket-recovery-message { min-height: 1.4rem; color: var(--gold-strong); font-weight: 600; }
+.ticket-recovery-message.is-error { color: #ffb3b3; }
+.ticket-recovery-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+.digital-receipt__recovery-note,
+.digital-receipt__checkin-status { max-width: 34rem; font-size: 0.88rem; }
+.digital-receipt__recovery-note { color: var(--muted); }
+.digital-receipt__checkin-status { padding: 0.65rem 0.8rem; border-radius: 12px; background: rgba(201, 164, 74, 0.12); color: var(--gold-strong); }
 
 @media (max-width: 430px) {
   .digital-receipt { padding: 1rem; }
   .digital-receipt__qr { width: min(100%, 336px); min-height: min(336px, 100vw - 4rem); padding: 8px; }
   .digital-receipt__actions .button { width: 100%; }
+  .ticket-recovery-modal { padding: 0.5rem; align-items: end; }
+  .ticket-recovery-modal__panel { max-height: calc(100dvh - 0.5rem); border-radius: 22px 22px 0 0; padding: 1.2rem; padding-bottom: max(1.2rem, env(safe-area-inset-bottom)); }
+  .ticket-recovery-actions { flex-direction: column; }
+  .ticket-recovery-actions .button { width: 100%; min-height: 48px; }
 }
 
 .confirmation__layout {

@@ -77,5 +77,72 @@
     };
   }
 
-  window.MAFDSupabase = { salvarConfirmacao };
+  async function recuperarIngresso(nomeCompleto, whatsapp) {
+    const nomeNormalizado = String(nomeCompleto || '').trim().replace(/\s+/g, ' ');
+    const whatsappNormalizado = String(whatsapp || '').replace(/\D/g, '').slice(-11);
+    if (nomeNormalizado.length < 3 || ![10, 11].includes(whatsappNormalizado.length)) {
+      return { resultado: 'nao_encontrado' };
+    }
+
+    const supabaseUrl = String(config.supabaseUrl || '').replace(/\/$/, '');
+    const publishableKey = String(config.supabasePublishableKey || '');
+    if (!supabaseUrl || !publishableKey || supabaseUrl.includes('COLE_AQUI') || publishableKey.includes('COLE_AQUI')) {
+      const error = new Error('Supabase não configurado.');
+      error.isNetwork = true;
+      throw error;
+    }
+
+    let response;
+    try {
+      response = await fetch(`${supabaseUrl}/rest/v1/rpc/recuperar_ingresso`, {
+        method: 'POST',
+        headers: {
+          apikey: publishableKey,
+          Authorization: `Bearer ${publishableKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          p_nome_completo: nomeNormalizado,
+          p_whatsapp: whatsappNormalizado
+        })
+      });
+    } catch (cause) {
+      console.error('Falha de rede ao recuperar ingresso.', { tipo: cause?.name || 'NetworkError' });
+      const error = new Error('Falha de rede ao consultar ingresso.');
+      error.isNetwork = true;
+      throw error;
+    }
+
+    if (!response.ok) {
+      console.error('Falha da RPC de recuperação de ingresso.', { status: response.status });
+      const error = new Error('A consulta do ingresso não pôde ser concluída.');
+      error.status = response.status;
+      error.isNetwork = response.status >= 500;
+      throw error;
+    }
+
+    let payload;
+    try {
+      payload = await response.json();
+    } catch (_) {
+      throw new Error('Resposta inválida ao consultar ingresso.');
+    }
+    const row = Array.isArray(payload) ? payload[0] : payload;
+    if (!row || row.resultado !== 'encontrado' || !row.checkin_token) {
+      return { resultado: row?.resultado === 'dados_ambiguos' ? 'dados_ambiguos' : 'nao_encontrado' };
+    }
+
+    return {
+      resultado: 'encontrado',
+      nomeCompleto: String(row.nome_completo || ''),
+      igreja: String(row.igreja || ''),
+      quantidadeConvidados: Number(row.quantidade_convidados || 0),
+      checkinToken: String(row.checkin_token),
+      checkinRealizado: row.checkin_realizado === true,
+      checkinEm: row.checkin_em || null,
+      criadoEm: row.criado_em || null
+    };
+  }
+
+  window.MAFDSupabase = { salvarConfirmacao, recuperarIngresso };
 })();

@@ -421,6 +421,10 @@
             <p class="eyebrow">Confirmação</p>
             <h2>Garanta sua presença com elegância e segurança</h2>
           </div>
+          <div class="ticket-recovery-entry">
+            <p>Já confirmou sua presença?</p>
+            <button class="button button--ghost" type="button" id="open-ticket-recovery">Recuperar meu ingresso</button>
+          </div>
           <div class="confirmation__layout">
             <form id="confirmation-form" novalidate>
               <div class="field-group">
@@ -518,6 +522,42 @@
     </a>
 
     <button class="back-to-top" type="button" aria-label="Voltar ao topo">↑</button>
+
+    <div class="ticket-recovery-modal" id="ticket-recovery-modal" hidden>
+      <div class="ticket-recovery-modal__backdrop" data-recovery-close></div>
+      <section class="ticket-recovery-modal__panel" role="dialog" aria-modal="true" aria-labelledby="ticket-recovery-title" tabindex="-1">
+        <button class="ticket-recovery-modal__close" type="button" aria-label="Fechar recuperação" data-recovery-close>×</button>
+        <h2 id="ticket-recovery-title">Recuperar meu ingresso</h2>
+        <p>Informe os mesmos dados utilizados na confirmação.</p>
+
+        <div class="ticket-recovery-local" id="ticket-recovery-local" hidden>
+          <strong>Ingresso encontrado neste dispositivo</strong>
+          <span id="ticket-recovery-local-name"></span>
+          <button class="button button--full" type="button" id="reopen-local-ticket">Reabrir meu ingresso</button>
+        </div>
+
+        <div class="ticket-recovery-separator"><span>ou</span></div>
+        <button class="ticket-recovery-use-data" type="button" id="show-online-recovery">Recuperar usando meus dados</button>
+
+        <form id="ticket-recovery-form" novalidate>
+          <div class="field-group">
+            <label for="recovery-name">Nome completo</label>
+            <input id="recovery-name" name="nomeCompleto" type="text" autocomplete="name" required />
+          </div>
+          <div class="field-group">
+            <label for="recovery-whatsapp">WhatsApp</label>
+            <input id="recovery-whatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" required />
+          </div>
+          <p class="ticket-recovery-message" id="ticket-recovery-message" role="status" aria-live="polite"></p>
+          <div class="ticket-recovery-actions">
+            <button class="button" type="submit">Recuperar ingresso</button>
+            <button class="button button--ghost" type="button" data-recovery-close>Cancelar</button>
+          </div>
+        </form>
+
+        <button class="ticket-recovery-register" type="button" id="start-new-registration">Ainda não confirmou? Fazer minha inscrição</button>
+      </section>
+    </div>
 
     <script src="assets/js/config.js" defer></script>
     <script src="assets/js/supabase.js" defer></script>

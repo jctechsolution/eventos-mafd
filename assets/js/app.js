@@ -15,6 +15,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const header = document.querySelector('.site-header');
   const openingScreen = document.getElementById('opening-screen');
   const skipIntroButton = document.getElementById('skip-intro');
+  const recoveryOpenButton = document.getElementById('open-ticket-recovery');
+  const recoveryModal = document.getElementById('ticket-recovery-modal');
+  const recoveryPanel = recoveryModal?.querySelector('[role="dialog"]');
+  const recoveryForm = document.getElementById('ticket-recovery-form');
+  const recoveryWhatsappInput = document.getElementById('recovery-whatsapp');
+  const recoveryMessage = document.getElementById('ticket-recovery-message');
+  const recoveryLocal = document.getElementById('ticket-recovery-local');
+  const recoveryLocalName = document.getElementById('ticket-recovery-local-name');
+  const reopenLocalTicketButton = document.getElementById('reopen-local-ticket');
+  const showOnlineRecoveryButton = document.getElementById('show-online-recovery');
+  const startNewRegistrationButton = document.getElementById('start-new-registration');
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const observer = new IntersectionObserver(
     (entries) => {
@@ -205,24 +216,30 @@ document.addEventListener('DOMContentLoaded', () => {
     return url.toString();
   };
 
-  const getStoredConfirmations = () => {
-    const raw = localStorage.getItem(config.storageKey);
-    if (!raw) {
-      return [];
-    }
-
+  const LAST_TICKET_KEY = 'mafd_ultimo_ingresso_v1';
+  const saveLastTicket = (record) => {
+    const ticket = {
+      nome: String(record.nomeCompleto || ''),
+      checkinToken: String(record.checkinToken || ''),
+      totalParticipantes: Number(record.quantidadeConvidados || 0) + 1,
+      confirmadoEm: record.criadoEm || new Date().toISOString(),
+      evento: config.eventName
+    };
     try {
-      return JSON.parse(raw);
-    } catch (error) {
-      console.warn('Não foi possível ler as confirmações salvas localmente.', error);
-      return [];
+      localStorage.setItem(LAST_TICKET_KEY, JSON.stringify(ticket));
+    } catch (_) {
+      console.warn('O cache local do ingresso não está disponível neste dispositivo.');
     }
   };
 
-  const saveConfirmation = (record) => {
-    const current = getStoredConfirmations();
-    current.push(record);
-    localStorage.setItem(config.storageKey, JSON.stringify(current));
+  const getLastTicket = () => {
+    try {
+      const ticket = JSON.parse(localStorage.getItem(LAST_TICKET_KEY) || 'null');
+      if (!ticket || ticket.evento !== config.eventName || !ticket.nome || !ticket.checkinToken) return null;
+      return ticket;
+    } catch (_) {
+      return null;
+    }
   };
 
   const showMessage = (message, isError = false) => {
@@ -266,11 +283,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const buildSuccessMarkup = (record) => {
     const totalParticipants = Number(record.quantidadeConvidados || 0) + 1;
     const shortCode = record.checkinToken.replace(/-/g, '').slice(0, 8).toUpperCase();
+    const greeting = record.recovered
+      ? 'Ingresso recuperado com sucesso.'
+      : 'Sua confirmação foi registrada com sucesso.';
+    const checkinStatus = record.checkinRealizado && record.checkinEm
+      ? `<p class="digital-receipt__checkin-status">Check-in já realizado em ${new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(record.checkinEm))}.</p>`
+      : '';
     return `
       <div class="digital-receipt" tabindex="-1">
         <span class="digital-receipt__seal">PRESENÇA CONFIRMADA</span>
         <h3>Seu acesso está garantido</h3>
-        <p class="digital-receipt__greeting">Olá, <strong data-receipt-name></strong>. Sua confirmação foi registrada com sucesso.</p>
+        <p class="digital-receipt__greeting">Olá, <strong data-receipt-name></strong>. ${greeting}</p>
         <div class="digital-receipt__event">
           <strong>Festa de Crente... Com Homens de Deus</strong>
           <span>08 de agosto de 2026 · 17h às 21h</span>
@@ -280,7 +303,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="digital-receipt__qr" id="receipt-qr" aria-label="QR Code individual para check-in"></div>
         <p class="digital-receipt__qr-status" id="receipt-qr-status" role="status"></p>
         <p class="digital-receipt__instruction">Apresente este QR Code na entrada do evento para realizar seu check-in e garantir sua participação no sorteio dos brindes.</p>
+        ${checkinStatus}
         <p class="digital-receipt__warning">Este código é individual. Evite compartilhá-lo com outras pessoas.</p>
+        <p class="digital-receipt__recovery-note">Guarde este QR Code. Caso o perca, você poderá recuperá-lo posteriormente neste site utilizando seu nome completo e WhatsApp cadastrados.</p>
         <span class="digital-receipt__code">Código: ${shortCode.slice(0, 4)}-${shortCode.slice(4)}</span>
         <div class="button-group digital-receipt__actions">
           <button class="button" type="button" data-action="download">Baixar comprovante</button>
@@ -419,6 +444,170 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  const exibirComprovanteDigital = async (dados, { recovered = false, persistLocal = false } = {}) => {
+    if (!dados?.checkinToken) throw new Error('Token do ingresso indisponível.');
+    activeReceipt = {
+      ...dados,
+      recovered,
+      checkinUrl: buildCheckinUrl(dados.checkinToken)
+    };
+    if (persistLocal) saveLastTicket(activeReceipt);
+
+    summary.innerHTML = buildSuccessMarkup(activeReceipt);
+    confirmationSection?.classList.add('is-confirmed');
+    confirmationLayout?.classList.add('is-receipt-only');
+    summary.querySelector('[data-receipt-name]').textContent = activeReceipt.nomeCompleto;
+    const qrStatus = summary.querySelector('#receipt-qr-status');
+    if (typeof window.QRCode === 'function') {
+      const receiptActions = summary.querySelectorAll('[data-action="download"], [data-action="share-receipt"]');
+      receiptActions.forEach((button) => { button.disabled = true; });
+      new window.QRCode(summary.querySelector('#receipt-qr'), {
+        text: activeReceipt.checkinUrl,
+        width: 320,
+        height: 320,
+        colorDark: '#211b0d',
+        colorLight: '#fffaf0',
+        correctLevel: window.QRCode.CorrectLevel.H
+      });
+      const qrCanvas = getQrCanvas();
+      if (qrCanvas) await addLogoToQr(qrCanvas);
+      receiptActions.forEach((button) => { button.disabled = false; });
+      qrStatus.textContent = '';
+    } else {
+      qrStatus.textContent = 'QR Code temporariamente indisponível. Sua confirmação continua válida.';
+    }
+    summary.querySelectorAll('[data-action]').forEach((button) => {
+      button.addEventListener('click', () => handleAction(button.getAttribute('data-action')));
+    });
+    summary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  let recoveryBusy = false;
+  let recoveryReturnFocus = null;
+  const setRecoveryMessage = (message, isError = false) => {
+    recoveryMessage.textContent = message;
+    recoveryMessage.classList.toggle('is-error', isError);
+  };
+
+  const closeRecoveryModal = () => {
+    if (!recoveryModal || recoveryBusy) return;
+    recoveryModal.hidden = true;
+    document.body.classList.remove('recovery-modal-open');
+    recoveryReturnFocus?.focus();
+  };
+
+  const openRecoveryModal = () => {
+    if (!recoveryModal) return;
+    recoveryReturnFocus = document.activeElement;
+    const localTicket = getLastTicket();
+    recoveryLocal.hidden = !localTicket;
+    recoveryLocalName.textContent = localTicket ? localTicket.nome : '';
+    setRecoveryMessage('');
+    recoveryModal.hidden = false;
+    document.body.classList.add('recovery-modal-open');
+    window.requestAnimationFrame(() => recoveryPanel.focus());
+  };
+
+  recoveryOpenButton?.addEventListener('click', openRecoveryModal);
+  recoveryModal?.querySelectorAll('[data-recovery-close]').forEach((button) => {
+    button.addEventListener('click', closeRecoveryModal);
+  });
+  showOnlineRecoveryButton?.addEventListener('click', () => document.getElementById('recovery-name')?.focus());
+  recoveryWhatsappInput?.addEventListener('input', (event) => { event.target.value = formatPhone(event.target.value); });
+
+  recoveryModal?.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeRecoveryModal();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = [...recoveryPanel.querySelectorAll('button:not([disabled]), input:not([disabled])')]
+      .filter((element) => !element.closest('[hidden]'));
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
+  reopenLocalTicketButton?.addEventListener('click', async () => {
+    if (recoveryBusy) return;
+    const ticket = getLastTicket();
+    if (!ticket) {
+      setRecoveryMessage('Não foi possível localizar um ingresso neste dispositivo.', true);
+      return;
+    }
+    recoveryBusy = true;
+    try {
+      await exibirComprovanteDigital({
+        nomeCompleto: ticket.nome,
+        quantidadeConvidados: Math.max(0, Number(ticket.totalParticipantes || 1) - 1),
+        checkinToken: ticket.checkinToken,
+        criadoEm: ticket.confirmadoEm
+      }, { recovered: true });
+      recoveryBusy = false;
+      closeRecoveryModal();
+    } catch (_) {
+      recoveryBusy = false;
+      setRecoveryMessage('Não foi possível reabrir o ingresso neste dispositivo.', true);
+    }
+  });
+
+  recoveryForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (recoveryBusy) return;
+    const submitButton = recoveryForm.querySelector('button[type="submit"]');
+    const nomeCompleto = recoveryForm.elements.nomeCompleto.value.trim().replace(/\s+/g, ' ');
+    const whatsapp = normalizePhone(recoveryForm.elements.whatsapp.value);
+    if (nomeCompleto.length < 3 || whatsapp.length < 10) {
+      setRecoveryMessage('Informe nome completo e WhatsApp cadastrados.', true);
+      return;
+    }
+
+    recoveryBusy = true;
+    submitButton.disabled = true;
+    setRecoveryMessage('Consultando ingresso...');
+    try {
+      const result = await window.MAFDSupabase.recuperarIngresso(nomeCompleto, whatsapp);
+      if (result?.resultado !== 'encontrado') {
+        setRecoveryMessage('Não foi possível localizar um ingresso com os dados informados.', true);
+        await new Promise((resolve) => window.setTimeout(resolve, 2000));
+        return;
+      }
+      await exibirComprovanteDigital(result, { recovered: true, persistLocal: true });
+      recoveryBusy = false;
+      submitButton.disabled = false;
+      closeRecoveryModal();
+      return;
+    } catch (error) {
+      setRecoveryMessage(
+        error.isNetwork
+          ? 'Não foi possível consultar seu ingresso agora. Verifique sua conexão e tente novamente.'
+          : 'Não foi possível localizar um ingresso com os dados informados.',
+        true
+      );
+      await new Promise((resolve) => window.setTimeout(resolve, 2000));
+    } finally {
+      recoveryBusy = false;
+      submitButton.disabled = false;
+    }
+  });
+
+  startNewRegistrationButton?.addEventListener('click', () => {
+    if (recoveryBusy) return;
+    closeRecoveryModal();
+    form.reset();
+    setQuantityVisibility();
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.setTimeout(() => form.querySelector('#nome')?.focus(), 350);
+  });
+
   document.querySelectorAll('[data-action]').forEach((button) => {
     button.addEventListener('click', () => handleAction(button.getAttribute('data-action')));
   });
@@ -492,36 +681,11 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error('O servidor não confirmou o token do comprovante.');
         }
 
-        saveConfirmation({ ...record, checkinToken: undefined, status: 'confirmed' });
-        activeReceipt = { ...record, checkinUrl: buildCheckinUrl(result.checkinToken) };
         showMessage('Confirmação enviada com sucesso.');
-        summary.innerHTML = buildSuccessMarkup(activeReceipt);
-        confirmationSection?.classList.add('is-confirmed');
-        confirmationLayout?.classList.add('is-receipt-only');
-        summary.querySelector('[data-receipt-name]').textContent = nomeCompleto;
-        const qrStatus = summary.querySelector('#receipt-qr-status');
-        if (typeof window.QRCode === 'function') {
-          const receiptActions = summary.querySelectorAll('[data-action="download"], [data-action="share-receipt"]');
-          receiptActions.forEach((button) => { button.disabled = true; });
-          new window.QRCode(summary.querySelector('#receipt-qr'), {
-            text: activeReceipt.checkinUrl,
-            width: 320,
-            height: 320,
-            colorDark: '#211b0d',
-            colorLight: '#fffaf0',
-            correctLevel: window.QRCode.CorrectLevel.H
-          });
-          const qrCanvas = getQrCanvas();
-          if (qrCanvas) await addLogoToQr(qrCanvas);
-          receiptActions.forEach((button) => { button.disabled = false; });
-          qrStatus.textContent = '';
-        } else {
-          qrStatus.textContent = 'QR Code temporariamente indisponível. Sua confirmação continua válida.';
-        }
-        summary.querySelectorAll('[data-action]').forEach((button) => {
-          button.addEventListener('click', () => handleAction(button.getAttribute('data-action')));
-        });
-        summary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        await exibirComprovanteDigital(
+          { ...record, checkinToken: result.checkinToken },
+          { persistLocal: true }
+        );
       } catch (error) {
         console.error('Erro completo ao registrar presença:', error);
         showMessage(
