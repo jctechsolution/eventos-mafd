@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Recepção e check-in | MAFD Eventos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/checkin.css" />
+  </head>
+  <body>
+    <header class="reception-header">
+      <div><img src="../assets/img/logo-rede-homens.jpeg" alt="" /><span><strong>Recepção MAFD</strong><small id="operator-email">Verificando acesso...</small></span></div>
+      <button id="logout-button" type="button">Sair</button>
+    </header>
+    <main class="reception-shell">
+      <section class="scanner-card" aria-labelledby="checkin-title">
+        <span class="eyebrow">CREDENCIAMENTO 2026</span>
+        <h1 id="checkin-title">Check-in de participantes</h1>
+        <p>Leia o QR Code ou consulte manualmente o código do comprovante.</p>
+        <div class="scanner-actions">
+          <button class="primary-button" id="start-camera" type="button">Iniciar câmera</button>
+          <button class="secondary-button" id="stop-camera" type="button" disabled>Parar câmera</button>
+        </div>
+        <div id="qr-reader" hidden></div>
+        <form id="manual-search-form">
+          <label for="manual-token">Código UUID ou URL do comprovante</label>
+          <div><input id="manual-token" name="token" autocomplete="off" spellcheck="false" required /><button class="primary-button" type="submit">Consultar código manualmente</button></div>
+        </form>
+        <p class="status-message" id="reception-message" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="participant-card" id="participant-card" hidden aria-live="polite">
+        <span class="participant-card__seal" id="participant-seal">PARTICIPANTE LOCALIZADO</span>
+        <h2 id="participant-name"></h2>
+        <dl>
+          <div><dt>Igreja ou congregação</dt><dd id="participant-church"></dd></div>
+          <div><dt>Primeira vez na Rede de Homens</dt><dd id="participant-first-time"></dd></div>
+          <div><dt>Participará do coquetel</dt><dd id="participant-cocktail"></dd></div>
+          <div><dt>Quantidade de convidados</dt><dd id="participant-guests"></dd></div>
+          <div><dt>Total do grupo</dt><dd id="participant-total"></dd></div>
+          <div><dt>Situação do check-in</dt><dd id="participant-status"></dd></div>
+        </dl>
+        <p id="checkin-time" class="checkin-time"></p>
+        <div class="participant-card__actions">
+          <button class="primary-button" id="confirm-entry" type="button">Confirmar entrada</button>
+          <button class="secondary-button" id="next-participant" type="button">Ler próximo participante</button>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="confirmation-dialog">
+      <form method="dialog">
+        <h2>Confirmar entrada?</h2>
+        <p>Esta ação registrará o check-in do participante e não poderá ser repetida.</p>
+        <div><button class="secondary-button" value="cancel">Cancelar</button><button class="primary-button" id="dialog-confirm" value="confirm">Confirmar entrada</button></div>
+      </form>
+    </dialog>
+    <script src="../assets/js/config.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js" defer></script>
+    <script src="../assets/js/auth-recepcao.js" defer></script>
+    <script src="../assets/js/checkin.js" defer></script>
+  </body>
+</html>

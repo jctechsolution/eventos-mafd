@@ -29,7 +29,8 @@
       leva_convidados: levaConvidados,
       quantidade_convidados: levaConvidados ? Number(dados.quantidade_convidados || 0) : 0,
       observacao: String(dados.observacao || '').trim() || null,
-      consentimento: true
+      consentimento: true,
+      checkin_token: String(dados.checkin_token || '').trim()
     };
 
     const response = await fetch(`${supabaseUrl}/rest/v1/confirmacoes`, {
@@ -70,7 +71,10 @@
       throw error;
     }
 
-    return true;
+    return {
+      sucesso: true,
+      checkinToken: payload.checkin_token
+    };
   }
 
   window.MAFDSupabase = { salvarConfirmacao };

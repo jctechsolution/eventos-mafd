@@ -1,0 +1,43 @@
+:root { color-scheme: dark; font-family: Inter,sans-serif; background:#070705; color:#f7efe0; --gold:#f2d38b; --green:#7de3a1; --red:#ffb3b3; }
+* { box-sizing:border-box; }
+body { margin:0; min-height:100vh; background:radial-gradient(circle at top,#33280f,#090806 42%,#030303); }
+button,input { font:inherit; }
+button { cursor:pointer; }
+button:disabled { opacity:.55; cursor:not-allowed; }
+button:focus-visible,input:focus-visible { outline:3px solid var(--gold); outline-offset:3px; }
+.reception-header { position:sticky; top:0; z-index:5; display:flex; justify-content:space-between; align-items:center; gap:1rem; padding:.75rem clamp(1rem,4vw,2rem); border-bottom:1px solid rgba(242,211,139,.2); background:rgba(5,5,4,.92); backdrop-filter:blur(14px); }
+.reception-header > div { display:flex; align-items:center; gap:.7rem; min-width:0; }
+.reception-header img { width:46px; height:46px; border-radius:50%; object-fit:cover; border:1px solid #d4af37; }
+.reception-header span { display:grid; min-width:0; }
+.reception-header small { overflow:hidden; color:#c9bea3; text-overflow:ellipsis; }
+.reception-header button,.secondary-button { min-height:46px; padding:.7rem 1rem; border:1px solid rgba(242,211,139,.32); border-radius:999px; background:#15130e; color:var(--gold); font-weight:800; }
+.reception-shell { width:min(100% - 2rem,920px); margin:0 auto; padding:clamp(1rem,4vw,2.5rem) 0 4rem; display:grid; gap:1.2rem; }
+.scanner-card,.participant-card { padding:clamp(1.1rem,4vw,2rem); border:1px solid rgba(242,211,139,.28); border-radius:26px; background:rgba(10,10,8,.88); box-shadow:0 20px 60px rgba(0,0,0,.4); }
+.eyebrow,.participant-card__seal { color:var(--gold); font-size:.72rem; font-weight:800; letter-spacing:.18em; }
+h1,h2 { font-family:'Playfair Display',serif; color:var(--gold); }
+h1 { margin:.45rem 0; font-size:clamp(2rem,7vw,3.4rem); }
+.scanner-actions,.participant-card__actions { display:flex; flex-wrap:wrap; gap:.7rem; margin:1rem 0; }
+.primary-button { min-height:48px; padding:.75rem 1.1rem; border:0; border-radius:999px; background:linear-gradient(135deg,#d4af37,#f2d38b); color:#171208; font-weight:800; }
+#qr-reader { width:100%; max-width:600px; margin:1rem auto; overflow:hidden; border-radius:18px; background:#fff; }
+#qr-reader video { max-width:100%; }
+#manual-search-form { display:grid; gap:.55rem; margin-top:1.2rem; }
+#manual-search-form label { font-weight:700; }
+#manual-search-form > div { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.6rem; }
+#manual-token { width:100%; min-height:50px; padding:.75rem .9rem; border:1px solid rgba(242,211,139,.28); border-radius:13px; background:#15130e; color:#fff; }
+.status-message { min-height:1.5rem; margin:.9rem 0 0; color:var(--gold); font-weight:700; }
+.status-message.is-error { color:var(--red); }
+.participant-card { border-color:rgba(125,227,161,.35); }
+.participant-card.is-complete { border-color:rgba(125,227,161,.7); box-shadow:0 20px 65px rgba(54,160,91,.16); }
+.participant-card.is-used { border-color:rgba(242,211,139,.55); }
+.participant-card h2 { margin:.6rem 0 1rem; font-size:clamp(1.8rem,6vw,2.7rem); }
+.participant-card dl { margin:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.7rem; }
+.participant-card dl div { padding:.85rem; border-radius:14px; background:rgba(255,255,255,.04); }
+.participant-card dt { color:#cfc3a7; font-size:.8rem; }
+.participant-card dd { margin:.3rem 0 0; font-weight:800; }
+.checkin-time { color:var(--green); font-weight:800; }
+dialog { width:min(100% - 2rem,460px); padding:0; border:1px solid rgba(242,211,139,.4); border-radius:22px; background:#11100c; color:#f7efe0; }
+dialog::backdrop { background:rgba(0,0,0,.76); }
+dialog form { padding:1.4rem; }
+dialog h2 { margin-top:0; }
+dialog form div { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:.6rem; }
+@media (max-width:600px) { .participant-card dl{grid-template-columns:1fr} #manual-search-form>div{grid-template-columns:1fr} .scanner-actions button,.participant-card__actions button,#manual-search-form button{width:100%} .reception-header small{max-width:160px} }

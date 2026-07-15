@@ -9,6 +9,7 @@ window.MAFD_CONFIG = {
   whatsappNumber: '559281922980',
   whatsappMessage: 'Olá! Gostaria de informações sobre a Festa de Crente... Com Homens de Deus, no dia 08 de agosto de 2026.',
   googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=MAFD%20Minist%C3%A9rio%20Apost%C3%B3lico%20Fortaleza%20de%20Davi%2C%20Rua%20Olavo%20Bilac%20165%2C%20Japiim%2C%20Manaus%20AM%2C%2069078-439',
+  publicSiteUrl: 'https://jctechsolution.github.io/eventos-mafd/',
   storageKey: 'mafd_eventos_confirmacoes_v1',
   adminStorageKey: 'mafd_eventos_confirmacoes_v1'
 };
