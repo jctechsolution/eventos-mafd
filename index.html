@@ -15,6 +15,16 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/css/styles.css" />
+    <script>
+      // Para testar novamente no console: sessionStorage.removeItem('mafd-intro-seen');
+      try {
+        if (sessionStorage.getItem('mafd-intro-seen') === 'true') {
+          document.documentElement.classList.add('intro-seen');
+        }
+      } catch (_) {
+        // A abertura continua normalmente quando o armazenamento nao esta disponivel.
+      }
+    </script>
   </head>
   <body>
     <div class="opening-screen" id="opening-screen" role="dialog" aria-label="Abertura cinematográfica">

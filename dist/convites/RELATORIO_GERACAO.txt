@@ -1,0 +1,34 @@
+RELATORIO DE GERACAO - KIT DE CONVITES MAFD
+
+Data e hora: 2026-07-15T07:45:13-04:00
+Logo usada: assets\img\logo-rede-homens.jpeg
+Texto superior removido: sim
+Titulo da frente: FESTA DE CRENTE...
+Titulo em uma unica linha: sim
+Tamanho final da fonte do titulo: 13.25 pt
+Dimensoes da caixa da logo na frente: 28 x 28 mm (proporcao preservada, ajuste contain)
+Ocupacao aproximada da logo na altura util superior: 28%
+URL do QR: https://jctechsolution.github.io/eventos-mafd/
+Pagina: 210 x 297 mm (A4 retrato)
+Convite: 60 x 120 mm
+Imposicao: 3 colunas x 2 linhas
+Sangria premium: 3 mm
+Area de seguranca: 4 mm
+QR: 32 mm, vetorial nos PDFs, correcao H, quiet zone de 4 modulos
+Logo no QR: 17% da largura, com area clara de protecao
+Fontes: MAFD-title (georgiab.ttf), MAFD-body (arial.ttf), MAFD-body_bold (arialbd.ttf)
+Fontes incorporadas: sim
+Quantidade de paginas por PDF: 2
+QR decodificado apos renderizacao: sim
+Valor decodificado: https://jctechsolution.github.io/eventos-mafd/
+PDF/X produzido: nao
+PDF/X validado: nao
+Padrao PDF/X: nao aplicavel
+PDFs premium e caseiro regenerados: sim
+
+Limitacoes:
+- Ghostscript nao encontrado: PDF/X nao foi produzido nem validado.
+
+Comandos para regenerar:
+python -m pip install -r tools/convites/requirements.txt
+python tools/convites/gerar_convites.py

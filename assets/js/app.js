@@ -30,8 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('[data-animate]').forEach((item) => observer.observe(item));
 
+  const INTRO_FADE_IN = 700;
+  const INTRO_HOLD = 800;
+  const INTRO_FADE_OUT = 700;
+  const PAGE_REVEAL = 500;
+  const INTRO_SKIP_FADE = 220;
+  document.documentElement.style.setProperty('--intro-page-reveal', `${PAGE_REVEAL}ms`);
   const introTimeouts = new Set();
-  let introState = 'active';
+  let introState = 'intro-active';
 
   const scheduleIntro = (callback, delay) => {
     const timeoutId = window.setTimeout(() => {
@@ -55,41 +61,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const finishIntro = ({ markSeen = true } = {}) => {
-    if (introState === 'complete') {
+  const completeIntro = ({ markSeen = true } = {}) => {
+    if (introState === 'intro-complete') {
       return;
     }
 
-    introState = 'complete';
+    introState = 'intro-complete';
     clearIntroTimeouts();
     openingScreen?.classList.add('is-hidden');
-    document.body.classList.remove('intro-active');
+    document.body.classList.remove('intro-active', 'intro-visible', 'intro-leaving');
     document.body.classList.add('intro-complete');
+    document.documentElement.classList.remove('intro-seen');
     if (markSeen) {
       storeIntroCompletion();
     }
     openingScreen?.remove();
   };
 
-  const closeIntro = ({ immediate = false, skipped = false, markSeen = true } = {}) => {
-    if (introState === 'complete') {
+  const finishIntro = ({ immediate = false, skipped = false, markSeen = true } = {}) => {
+    if (introState === 'intro-complete' || introState === 'intro-leaving') {
       return;
     }
 
     clearIntroTimeouts();
 
     if (!openingScreen || immediate) {
-      finishIntro({ markSeen });
+      completeIntro({ markSeen });
       return;
     }
 
-    introState = 'leaving';
+    introState = 'intro-leaving';
+    document.body.classList.remove('intro-visible');
+    document.body.classList.add('intro-leaving');
     openingScreen.classList.add(skipped ? 'is-skipping' : 'is-leaving');
-    scheduleIntro(finishIntro, skipped ? 160 : 600);
+    const fadeDuration = skipped ? INTRO_SKIP_FADE : INTRO_FADE_OUT;
+    const onTransitionEnd = (event) => {
+      if (event.target === openingScreen && event.propertyName === 'opacity') {
+        openingScreen.removeEventListener('transitionend', onTransitionEnd);
+        completeIntro({ markSeen });
+      }
+    };
+    openingScreen.addEventListener('transitionend', onTransitionEnd);
+    scheduleIntro(() => {
+      openingScreen.removeEventListener('transitionend', onTransitionEnd);
+      completeIntro({ markSeen });
+    }, fadeDuration + 50);
   };
 
   if (!openingScreen) {
-    closeIntro({ immediate: true, markSeen: false });
+    finishIntro({ immediate: true, markSeen: false });
   } else {
     let alreadySeen = false;
     try {
@@ -99,15 +119,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (alreadySeen) {
-      closeIntro({ immediate: true, markSeen: false });
+      finishIntro({ immediate: true, markSeen: false });
     } else if (prefersReducedMotion) {
       document.body.classList.add('intro-active');
-      scheduleIntro(() => closeIntro({ skipped: true }), 40);
+      scheduleIntro(() => finishIntro({ immediate: true }), 40);
     } else {
       document.body.classList.add('intro-active');
+      document.body.classList.add('intro-visible');
+      introState = 'intro-visible';
       openingScreen.classList.add('is-visible');
-      scheduleIntro(closeIntro, 1250);
-      skipIntroButton?.addEventListener('click', () => closeIntro({ skipped: true }), { once: true });
+      scheduleIntro(finishIntro, INTRO_FADE_IN + INTRO_HOLD);
+      skipIntroButton?.addEventListener('click', () => finishIntro({ skipped: true }), { once: true });
     }
   }
 

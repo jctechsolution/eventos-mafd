@@ -1,0 +1,34 @@
+KIT OFICIAL DE CONVITES MAFD EVENTOS
+
+DIAGRAMA DE IMPOSICAO
+
+Pagina 1:
+F1 | F2 | F3
+F4 | F5 | F6
+
+Pagina 2:
+V1 | V2 | V3
+V4 | V5 | V6
+
+VERSAO CASEIRA
+
+- Papel A4 retrato.
+- Impressao frente e verso.
+- Virar na borda longa.
+- Escala 100% ou tamanho real.
+- Desativar "Ajustar a pagina".
+- Centralizar na folha.
+- Fazer uma folha de teste.
+- Conferir alinhamento antes da tiragem final.
+- Impressoras domesticas podem apresentar deslocamento mecanico de 1 a 3 mm.
+
+VERSAO GRAFICA
+
+- Tamanho final: 60 x 120 mm.
+- Sangria: 3 mm.
+- Area de seguranca: 4 mm.
+- Duas paginas: frente e verso.
+- Solicitar impressao frente e verso com registro.
+- Solicitar prova fisica antes da tiragem.
+- Sugestao de papel: couche fosco 250 g/m2 ou 300 g/m2.
+- Cantos arredondados opcionais, raio aproximado de 4 a 5 mm.

@@ -102,12 +102,17 @@ button {
   width: min(100%, calc(var(--max-width) + 2rem));
   margin: 0 auto;
   padding: 1rem 1rem 3rem;
-  opacity: 1;
-  transition: opacity 450ms cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 0;
 }
 
-body.intro-active .page-shell {
-  opacity: 0;
+body.intro-complete .page-shell {
+  opacity: 1;
+  transition: opacity var(--intro-page-reveal, 500ms) ease;
+}
+
+html.intro-seen .page-shell {
+  opacity: 1;
+  transition: none;
 }
 
 .opening-screen {
@@ -123,24 +128,32 @@ body.intro-active .page-shell {
   color: var(--text);
   opacity: 1;
   visibility: visible;
-  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 600ms;
+  transition: opacity 700ms ease-in-out;
 }
 
-.opening-screen.is-leaving,
-.opening-screen.is-hidden {
+.opening-screen.is-leaving {
   opacity: 0;
   pointer-events: none;
+  transition: opacity 700ms ease-in-out;
 }
 
 .opening-screen.is-hidden {
+  opacity: 0;
   visibility: hidden;
+  pointer-events: none;
 }
 
 .opening-screen.is-skipping {
   opacity: 0;
   pointer-events: none;
-  transition-duration: 160ms, 0s;
-  transition-delay: 0s, 160ms;
+  transition-duration: 220ms;
+}
+
+html.intro-seen .opening-screen {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: none;
 }
 
 .opening-screen__glow {
@@ -150,10 +163,13 @@ body.intro-active .page-shell {
   background: radial-gradient(circle, rgba(242, 211, 139, 0.18), transparent 70%);
   filter: blur(34px);
   opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .opening-screen.is-visible .opening-screen__glow {
-  animation: introGlow 1850ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0.42;
+  transform: scale(1.03);
 }
 
 .opening-screen__logo {
@@ -169,11 +185,13 @@ body.intro-active .page-shell {
   backdrop-filter: blur(14px);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
   opacity: 0;
-  transform: scale(1);
+  transform: scale(0.96);
+  transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .opening-screen.is-visible .opening-screen__logo {
-  animation: introLogo 1850ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 1;
+  transform: scale(1.03);
 }
 
 .opening-screen__logo img {
@@ -199,10 +217,36 @@ body.intro-active .page-shell {
   text-align: center;
   opacity: 0;
   transform: translateY(8px);
+  transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .opening-screen.is-visible .opening-screen__titles {
-  animation: introText 1850ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.opening-screen.is-leaving .opening-screen__logo,
+.opening-screen.is-skipping .opening-screen__logo {
+  opacity: 0;
+  transform: scale(1.01);
+}
+
+.opening-screen.is-leaving .opening-screen__titles,
+.opening-screen.is-skipping .opening-screen__titles {
+  opacity: 0;
+  transform: translateY(-3px);
+}
+
+.opening-screen.is-leaving .opening-screen__glow,
+.opening-screen.is-skipping .opening-screen__glow {
+  opacity: 0;
+  transform: scale(1.01);
+}
+
+.opening-screen.is-skipping .opening-screen__logo,
+.opening-screen.is-skipping .opening-screen__titles,
+.opening-screen.is-skipping .opening-screen__glow {
+  transition-duration: 220ms;
 }
 
 .opening-screen__titles h2,
@@ -1272,53 +1316,6 @@ textarea:focus {
   [data-animate] {
     opacity: 1;
     transform: none;
-  }
-}
-
-@keyframes introGlow {
-  0% {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  32.43%,
-  67.57% {
-    opacity: 0.42;
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.03);
-  }
-}
-
-@keyframes introLogo {
-  0% {
-    opacity: 0;
-    transform: scale(1);
-  }
-  32.43%,
-  67.57% {
-    opacity: 1;
-    transform: scale(1.03);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.01);
-  }
-}
-
-@keyframes introText {
-  0% {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  32.43%,
-  67.57% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-3px);
   }
 }
 

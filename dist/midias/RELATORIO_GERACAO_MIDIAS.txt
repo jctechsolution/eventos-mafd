@@ -1,0 +1,24 @@
+RELATORIO DE GERACAO - KIT DIGITAL MAFD EVENTOS
+
+Data e hora: 2026-07-15T00:34:46-04:00
+Logo usada: assets\img\logo-rede-homens.jpeg
+URL do QR: https://jctechsolution.github.io/eventos-mafd/
+Fontes: Georgia Bold (titulo), Arial e Arial Bold (textos)
+Fallback de fonte utilizado: sim; Playfair Display e Inter nao estavam instaladas localmente.
+Formato: PNG RGB
+
+ARQUIVOS:
+- MAFD_Story_1080x1920.png: 1080 x 1920px; 210813 bytes; QR=OK; valor=https://jctechsolution.github.io/eventos-mafd/
+- MAFD_Status_WhatsApp_1080x1920.png: 1080 x 1920px; 212598 bytes; QR=OK; valor=https://jctechsolution.github.io/eventos-mafd/
+- MAFD_Feed_1080x1350.png: 1080 x 1350px; 152969 bytes; QR=OK; valor=https://jctechsolution.github.io/eventos-mafd/
+- MAFD_Quadrado_1080x1080.png: 1080 x 1080px; 118353 bytes; QR=OK; valor=https://jctechsolution.github.io/eventos-mafd/
+- MAFD_WhatsApp_Compartilhamento_1200x1500.png: 1200 x 1500px; 170590 bytes; QR=OK; valor=https://jctechsolution.github.io/eventos-mafd/
+- MAFD_Facebook_Capa_1640x924.png: 1640 x 924px; 183341 bytes; QR=OK; valor=https://jctechsolution.github.io/eventos-mafd/
+- MAFD_QR_Evento_2000px.png: 2000 x 2000px; 133919 bytes; QR=OK; valor=https://jctechsolution.github.io/eventos-mafd/
+
+Limitacoes:
+- As fontes da Landing Page foram substituidas pelos fallbacks locais permitidos.
+
+Comando para regenerar:
+python -m pip install -r tools/midias/requirements.txt
+python tools/midias/gerar_midias.py
