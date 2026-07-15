@@ -27,6 +27,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible { 
 button,.primary-button { min-height:42px; padding:.65rem .9rem; border:1px solid var(--border); border-radius:11px; color:var(--text); background:rgba(255,255,255,.04); cursor:pointer; }
 .primary-button { color:#090806; background:linear-gradient(135deg,var(--gold),var(--gold-strong)); font-weight:800; }
 button:disabled { opacity:.55; cursor:wait; }.admin-menu-button { display:none; font-size:1.25rem; }
+.admin-logout-button { min-height:44px; border-color:rgba(240,201,107,.48); color:var(--gold-strong); background:rgba(212,175,55,.04); transition:background-color .2s ease,border-color .2s ease,color .2s ease; }
+.admin-logout-button:hover:not(:disabled) { border-color:var(--gold-strong); color:var(--text); background:rgba(212,175,55,.12); }
 .admin-global-message { min-height:1.4rem; margin:-1rem 0; color:var(--gold-strong); font-weight:700; }.admin-global-message.is-error { color:var(--danger); }
 .section-title { display:flex; justify-content:space-between; align-items:end; gap:1rem; margin-bottom:1rem; }
 .admin-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1rem; }

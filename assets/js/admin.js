@@ -18,9 +18,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     sidebarExport: document.getElementById('sidebar-export'), sidebar: document.getElementById('admin-sidebar'),
     sidebarBackdrop: document.getElementById('admin-sidebar-backdrop'), menu: document.getElementById('admin-menu-button'),
     showCheckins: document.getElementById('show-checkins'), modal: document.getElementById('participant-modal'),
-    modalPanel: document.querySelector('.participant-modal__panel'), details: document.getElementById('participant-details')
+    modalPanel: document.querySelector('.participant-modal__panel'), details: document.getElementById('participant-details'),
+    logoutButtons: [...document.querySelectorAll('.admin-logout-button')]
   };
   const state = { page: 1, pageSize: 25, total: 0, rows: [], requestId: 0, detailReturnFocus: null };
+  let logoutInProgress = false;
   const formatDate = (value) => value ? new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyle: 'short', timeZone: 'America/Manaus' }).format(new Date(value)) : '—';
   const yesNo = (value) => value ? 'Sim' : 'Não';
   const normalizePhone = (value) => String(value || '').replace(/\D/g, '').slice(-11);
@@ -183,7 +185,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     finally { buttons.forEach((button) => { button.disabled = false; }); elements.export.textContent = original; }
   }
 
-  async function sairDoPainel() { elements.tbody.replaceChildren(); elements.cards.replaceChildren(); await auth.sairDoPainel(); redirectLogin(); }
+  const clearAdministrativeInterface = () => {
+    state.requestId += 1;
+    state.rows = [];
+    state.total = 0;
+    elements.tbody.replaceChildren();
+    elements.cards.replaceChildren();
+    elements.stats.replaceChildren();
+    elements.details.replaceChildren();
+    elements.tableWrapper.hidden = true;
+    elements.cards.hidden = true;
+    elements.pagination.hidden = true;
+    elements.modal.hidden = true;
+    elements.email.textContent = '';
+    elements.updated.textContent = '';
+    elements.message.textContent = '';
+    elements.app.hidden = true;
+    elements.loading.hidden = false;
+    elements.loading.querySelector('p').textContent = 'Encerrando sessão...';
+  };
+
+  async function sairDoPainel() {
+    if (logoutInProgress) return;
+    logoutInProgress = true;
+    elements.logoutButtons.forEach((button) => { button.disabled = true; button.textContent = 'Saindo...'; });
+    clearAdministrativeInterface();
+    try {
+      await auth.sairDoPainel();
+    } finally {
+      window.location.replace('login-admin.html');
+    }
+  }
   const toggleSidebar = (open) => { elements.sidebar.classList.toggle('is-open', open); elements.sidebarBackdrop.hidden = !open; elements.menu.setAttribute('aria-expanded', String(open)); };
 
   try {
@@ -205,10 +237,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   elements.tbody.addEventListener('click', handleRowAction); elements.cards.addEventListener('click', handleRowAction);
   elements.export.addEventListener('click', exportarConfirmacoes); elements.sidebarExport.addEventListener('click', exportarConfirmacoes);
   elements.showCheckins.addEventListener('click', () => { elements.checkin.value = 'realizado'; state.page = 1; listarConfirmacoes(); document.getElementById('participants').scrollIntoView(); toggleSidebar(false); });
-  [document.getElementById('header-logout'), document.getElementById('sidebar-logout')].forEach((button) => button.addEventListener('click', sairDoPainel));
+  elements.logoutButtons.forEach((button) => button.addEventListener('click', sairDoPainel));
   elements.menu.addEventListener('click', () => toggleSidebar(!elements.sidebar.classList.contains('is-open'))); elements.sidebarBackdrop.addEventListener('click', () => toggleSidebar(false));
   elements.modal.querySelectorAll('[data-detail-close]').forEach((button) => button.addEventListener('click', closeDetails));
   elements.modal.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeDetails(); if (event.key !== 'Tab') return; const focusable = [...elements.modalPanel.querySelectorAll('button:not([disabled])')]; if (!focusable.length) return; const first=focusable[0],last=focusable[focusable.length-1]; if (event.shiftKey && document.activeElement===first) { event.preventDefault(); last.focus(); } else if (!event.shiftKey && document.activeElement===last) { event.preventDefault(); first.focus(); } });
 
   renderStatsSkeleton(); await Promise.all([carregarResumo(), listarConfirmacoes()]);
+
+  window.addEventListener('pageshow', async (event) => {
+    if (!event.persisted) return;
+    elements.app.hidden = true;
+    elements.loading.hidden = false;
+    elements.loading.querySelector('p').textContent = 'Validando acesso administrativo...';
+    try {
+      const cachedSession = await auth.obterSessaoAdmin();
+      if (!cachedSession.session || !cachedSession.authorized) {
+        clearAdministrativeInterface();
+        window.location.replace('login-admin.html');
+        return;
+      }
+      elements.email.textContent = cachedSession.session.user.email || 'Administrador';
+      elements.loading.hidden = true;
+      elements.app.hidden = false;
+    } catch (_) {
+      clearAdministrativeInterface();
+      window.location.replace('login-admin.html');
+    }
+  });
 });

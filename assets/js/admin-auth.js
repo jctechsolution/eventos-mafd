@@ -51,7 +51,18 @@
   }
 
   async function sairDoPainel() {
-    await client?.auth.signOut();
+    if (!client) return;
+    try {
+      const { error } = await client.auth.signOut();
+      if (error) throw error;
+    } catch (error) {
+      console.error('Falha técnica ao encerrar a sessão administrativa.', { tipo: error?.name || 'AuthError' });
+      try {
+        await client.auth.signOut({ scope: 'local' });
+      } catch (localError) {
+        console.error('Falha ao remover a sessão administrativa local.', { tipo: localError?.name || 'AuthError' });
+      }
+    }
   }
 
   window.MAFDAdminAuth = { client, getRole, obterSessaoAdmin, rpcAdmin, sairDoPainel };
