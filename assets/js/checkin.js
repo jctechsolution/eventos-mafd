@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let currentToken = '';
   let operationInProgress = false;
 
-  const loginUrl = () => `login-recepcao.html?next=${encodeURIComponent(`checkin.html${window.location.search}`)}`;
+  const loginUrl = () => `login.html?next=${encodeURIComponent(`checkin.html${window.location.search}`)}`;
   const redirectToLogin = () => window.location.replace(loginUrl());
   const setMessage = (text, error = false) => {
     elements.message.textContent = text;
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!state.session) return redirectToLogin();
     if (!state.authorized) {
       await auth.client.auth.signOut();
-      window.location.replace('login-recepcao.html?denied=1');
+      window.location.replace('login.html?denied=1');
       return;
     }
     elements.operator.textContent = state.session.user.email || 'Equipe autorizada';
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     return redirectToLogin();
   }
 
-  elements.logout.addEventListener('click', async () => { await stopCamera(); await auth.client.auth.signOut(); window.location.replace('login-recepcao.html'); });
+  elements.logout.addEventListener('click', async () => { await stopCamera(); await auth.client.auth.signOut(); window.location.replace('login.html'); });
   elements.start.addEventListener('click', async () => {
     if (typeof window.Html5Qrcode !== 'function') return setMessage('Leitor de câmera indisponível. Use a consulta manual.', true);
     elements.start.disabled = true;

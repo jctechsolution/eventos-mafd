@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const button = form.querySelector('button');
+    const originalButtonText = button.textContent;
     const data = new FormData(form);
     button.disabled = true;
     button.textContent = 'Entrando...';
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       setMessage('E-mail ou senha inválidos.', true);
     } finally {
       button.disabled = false;
-      button.textContent = 'Entrar na recepção';
+      button.textContent = originalButtonText;
     }
   });
 });

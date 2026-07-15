@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="digital-receipt__qr" id="receipt-qr" aria-label="QR Code individual para check-in"></div>
         <p class="digital-receipt__qr-status" id="receipt-qr-status" role="status"></p>
-        <p class="digital-receipt__instruction">Apresente este QR Code na entrada do evento para realizar seu check-in.</p>
+        <p class="digital-receipt__instruction">Apresente este QR Code na entrada do evento para realizar seu check-in e garantir sua participação no sorteio dos brindes.</p>
         <p class="digital-receipt__warning">Este código é individual. Evite compartilhá-lo com outras pessoas.</p>
         <span class="digital-receipt__code">Código: ${shortCode.slice(0, 4)}-${shortCode.slice(4)}</span>
         <div class="button-group digital-receipt__actions">
@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
     context.fillText('08 de agosto de 2026 · 17h às 21h', 450, 150);
     context.drawImage(qrCanvas, 190, 220, 520, 520);
     context.font = '600 27px Inter, sans-serif';
-    context.fillText('Apresente este QR Code na entrada do evento.', 450, 825);
+    context.fillText('Apresente este QR Code na entrada do evento para realizar seu check-in e garantir sua participação no sorteio dos brindes.', 450, 825);
     context.font = '24px Inter, sans-serif';
     context.fillText('MAFD — Ministério Apostólico Fortaleza de Davi', 450, 890);
     return canvas;
